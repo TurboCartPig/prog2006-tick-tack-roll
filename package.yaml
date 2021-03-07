@@ -1,0 +1,37 @@
+name:                assignment-one
+version:             0.1.0.0
+license:             BSD3
+author:              "Dennis Kristiansen"
+maintainer:          "Dennis Kristiansen <denniskr@stud.ntnu.no>"
+copyright:           "2021 Dennis Kristiansen"
+
+extra-source-files:
+- README.md
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+
+executables:
+  assignment-one-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - assignment-one
+
+tests:
+  assignment-one-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - assignment-one

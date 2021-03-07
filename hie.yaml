@@ -1,0 +1,8 @@
+cradle:
+  stack:
+    - path: "./src"
+      component: "assignment-one:lib"
+    - path: "./app"
+      component: "assignment-one:exe:assignment-one-exe"
+    - path: "./test"
+      component: "assignment-one:test:assignment-one-test"
