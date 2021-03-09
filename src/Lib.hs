@@ -1,4 +1,4 @@
-module Lib where
+module Lib (Rotation, Board, Mark (X, O, Empty), setMark, getMark, newBoard, rotateBoard) where
 
 import Data.Char (intToDigit)
 import Data.List (intercalate)
@@ -9,6 +9,10 @@ enumerate = zip [0 ..]
 
 -- | The width of one row of a board.
 rowWidth = 3 :: Int
+
+-- | Board rotation direction.
+data Rotation = RLeft | RRight
+  deriving (Show, Read)
 
 -- | A mark on the board.
 data Mark = O | X | Empty
@@ -67,8 +71,8 @@ checkIfWon :: Board -> Mark -> Bool
 checkIfWon (Board b) mark =
   let rows = or [all (== mark) (nthRow (Board b) r) | r <- [1 .. rowWidth]] :: Bool
       columns = or [all (== mark) (nthColumn (Board b) c) | c <- [1 .. rowWidth]] :: Bool
-      diagonal1 = all (== mark) [b !! d | d <- take rowWidth [0, rowWidth + 1 ..]]
-      diagonal2 = all (== mark) [b !! d | d <- take rowWidth [rowWidth - 1, rowWidth * 2 - 2 ..]]
+      diagonal1 = all (== mark) [b !! d | d <- take rowWidth [0, rowWidth + 1 ..]] :: Bool
+      diagonal2 = all (== mark) [b !! d | d <- take rowWidth [rowWidth - 1, rowWidth * 2 - 2 ..]] :: Bool
    in rows || columns || diagonal1 || diagonal2
 
 -- From here on functions require the board to be 3x3
@@ -76,15 +80,21 @@ checkIfWon (Board b) mark =
 
 swapCorners :: Board -> Board
 swapCorners (Board (a : b : c : xs)) = Board $ c : b : a : xs
-swapCorners _ = undefined
+swapCorners _ = undefined -- Other lenghts are not handled yet
 
 rotateLeft :: Board -> Board
 rotateLeft (Board [a, b, c, d, e, f, g, h, i]) = Board [c, f, i, b, e, h, a, d, g]
-rotateLeft _ = undefined
+rotateLeft _ = undefined -- Other lenghts are not handled yet
 
 rotateRight :: Board -> Board
 rotateRight (Board [a, b, c, d, e, f, g, h, i]) = Board [g, d, a, h, e, b, i, f, c]
-rotateRight _ = undefined
+rotateRight _ = undefined -- Other lenghts are not handled yet
+
+-- | First swap the corners and then rotate the board.
+rotateBoard :: Board -> Rotation -> Board
+rotateBoard b r = case r of
+  RRight -> rotateRight . swapCorners $ b
+  RLeft -> rotateLeft . swapCorners $ b
 
 instance Show Board where
   show (Board b) = intercalate "\n" [rowToString $ nthRow (Board b) r | r <- [1 .. rowWidth]]
