@@ -1,11 +1,8 @@
 module Lib (Rotation, Board, Mark (X, O, Empty), setMark, getMark, newBoard, rotateBoard) where
 
+import Common
 import Data.Char (intToDigit)
 import Data.List (intercalate)
-
--- | Enumerate a list.
-enumerate :: [a] -> [(Int, a)]
-enumerate = zip [0 ..]
 
 -- | The width of one row of a board.
 rowWidth = 3 :: Int

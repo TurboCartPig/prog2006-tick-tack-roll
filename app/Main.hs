@@ -1,27 +1,18 @@
 module Main where
 
-import Lib (Board, Mark (Empty, O, X), Rotation, getMark, newBoard, rotateBoard, setMark)
+import Common
+import Lib
 import Text.Read (readMaybe)
 
 gameOverStr = "GAME OVER!" :: String
-
--- | Maybe get the head of a list.
-headM :: [a] -> Maybe a
-headM [] = Nothing
-headM (x : _) = Just x
-
--- | Maybe get the tail of a list.
-tailM :: [a] -> Maybe [a]
-tailM [] = Nothing
-tailM (_ : xs) = Just xs
 
 -- | Parse the input string from the player into game actions.
 --
 -- >>> parsePlayerCommand "5"
 -- Just (5,Nothing)
 --
--- >>> parsePlayerCommand "5 Right"
--- Just (5,Just "Right")
+-- >>> parsePlayerCommand "5 RRight"
+-- Just (5,Just RRight)
 --
 -- >>> parsePlayerCommand "this is not valid"
 -- Nothing
