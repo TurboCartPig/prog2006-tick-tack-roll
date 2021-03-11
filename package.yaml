@@ -24,6 +24,7 @@ executables:
       - -with-rtsopts=-N
     dependencies:
       - assignment-one
+      - random
 
 tests:
   assignment-one-test:

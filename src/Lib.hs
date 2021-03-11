@@ -1,4 +1,4 @@
-module Lib (Rotation, Board, Mark (X, O, Empty), setMark, getMark, newBoard, rotateBoard) where
+module Lib (Rotation, Board, Mark (X, O, Empty), checkIfWon, setMark, getMark, makeMove, getPossibleMoves, newBoard, rotateBoard) where
 
 import Common
 import Data.Char (intToDigit)
@@ -43,6 +43,14 @@ getMark (Board b) p = b !! (p - 1)
 setMark :: Board -> Mark -> Int -> Board
 setMark (Board b) m p = Board $ take (p - 1) b ++ (m : drop p b)
 
+-- | Place a mark at a position only if it was not previously taken.
+makeMove :: Board -> Mark -> Int -> Either String Board
+makeMove b m i =
+  let prev = getMark b i
+   in if prev /= Empty
+        then Left "Mark already present!"
+        else Right $ setMark b m i
+
 -- | Get the nth row of a board.
 nthRow :: Board -> Int -> [Mark]
 nthRow (Board b) n = take rowWidth $ drop ((n - 1) * rowWidth) b
@@ -76,6 +84,10 @@ checkIfWon (Board b) mark =
       diagonal1 = all (== mark) [b !! d | d <- take rowWidth [0, rowWidth + 1 ..]] :: Bool
       diagonal2 = all (== mark) [b !! d | d <- take rowWidth [rowWidth - 1, rowWidth * 2 - 2 ..]] :: Bool
    in rows || columns || diagonal1 || diagonal2
+
+-- | Get all the possible moves (indecies of empty places) left to make on a board.
+getPossibleMoves :: Board -> [Int]
+getPossibleMoves (Board b) = map ((+ 1) . fst) $ filter (\(_, x) -> x == Empty) $ enumerate b
 
 -- | First swap the corners and then rotate the board.
 rotateBoard :: Board -> Rotation -> Board
