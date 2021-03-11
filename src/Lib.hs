@@ -23,6 +23,11 @@ instance Show Mark where
 -- | A board of marks used in the game.
 newtype Board = Board [Mark]
 
+instance Show Board where
+  show (Board b) = intercalate "\n" [rowToString $ nthRow (Board b) r | r <- [1 .. rowWidth]]
+    where
+      rowToString = map (head . show)
+
 -- | Create a new empty board.
 newBoard :: Board
 newBoard = Board $ replicate (rowWidth * rowWidth) Empty
@@ -72,6 +77,12 @@ checkIfWon (Board b) mark =
       diagonal2 = all (== mark) [b !! d | d <- take rowWidth [rowWidth - 1, rowWidth * 2 - 2 ..]] :: Bool
    in rows || columns || diagonal1 || diagonal2
 
+-- | First swap the corners and then rotate the board.
+rotateBoard :: Board -> Rotation -> Board
+rotateBoard b r = case r of
+  RRight -> rotateRight . swapCorners $ b
+  RLeft -> rotateLeft . swapCorners $ b
+
 -- From here on functions require the board to be 3x3
 -- ---------------------------------------------------------------------------------------------
 
@@ -86,14 +97,3 @@ rotateLeft _ = undefined -- Other lenghts are not handled yet
 rotateRight :: Board -> Board
 rotateRight (Board [a, b, c, d, e, f, g, h, i]) = Board [g, d, a, h, e, b, i, f, c]
 rotateRight _ = undefined -- Other lenghts are not handled yet
-
--- | First swap the corners and then rotate the board.
-rotateBoard :: Board -> Rotation -> Board
-rotateBoard b r = case r of
-  RRight -> rotateRight . swapCorners $ b
-  RLeft -> rotateLeft . swapCorners $ b
-
-instance Show Board where
-  show (Board b) = intercalate "\n" [rowToString $ nthRow (Board b) r | r <- [1 .. rowWidth]]
-    where
-      rowToString = map (head . show)
