@@ -1,7 +1,11 @@
 module Main where
 
 import Common
+import Control.Monad (when)
 import Lib
+import System.Console.GetOpt
+import System.Environment (getArgs)
+import System.Exit (ExitCode (ExitSuccess), exitWith)
 import System.Random (randomRIO)
 import Text.Read (readMaybe)
 
@@ -59,8 +63,38 @@ gameloop b = do
         Left err -> putStrLn err >> putStrLn gameOverStr
     Nothing -> putStrLn gameOverStr
 
+-- | Command line flags for the program.
+data Flags = CpuVsCpu | Help
+  deriving (Eq, Ord, Enum, Show, Bounded)
+
+-- | Defines what flags the program accepts.
+flags :: [OptDescr Flags]
+flags =
+  [ Option [] ["cpu"] (NoArg CpuVsCpu) "Run the game in cpu vs cpu mode",
+    Option [] ["help"] (NoArg Help) "Print this help message"
+  ]
+
+-- | Parse the raw command line arguments into flags.
+parse :: [String] -> IO [Flags]
+parse argv =
+  case getOpt Permute flags argv of
+    (f, _, []) -> do
+      -- Print help and exit if --help was passed
+      if Help `elem` f
+        then do
+          putStrLn (usageInfo header flags)
+          exitWith ExitSuccess
+        else return f
+    (_, _, es) -> ioError (userError (concat es ++ usageInfo header flags))
+  where
+    header = "Usage: tic-tack-roll [--cpu | --help]"
+
 main :: IO ()
 main = do
+  flags <- getArgs >>= parse
+
+  when (CpuVsCpu `elem` flags) $ putStrLn "Hei"
+
   let board = newBoard
   print board
   gameloop board
