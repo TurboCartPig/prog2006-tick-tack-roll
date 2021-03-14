@@ -23,7 +23,7 @@ data Flags = CpuVsCpu | HumanVsHuman | Help
 flags :: [OptDescr Flags]
 flags =
   [ Option [] ["cpu"] (NoArg CpuVsCpu) "Run the game in cpu vs. cpu mode",
-    Option [] ["human"] (NoArg HumanVsHuman) "Run the game in human vs. ''human mode",
+    Option [] ["human"] (NoArg HumanVsHuman) "Run the game in human vs. human mode",
     Option ['h'] ["help"] (NoArg Help) "Print this help message"
   ]
 
