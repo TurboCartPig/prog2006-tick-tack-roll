@@ -44,12 +44,12 @@ setMark :: Board -> Mark -> Int -> Board
 setMark (Board b) m p = Board $ take (p - 1) b ++ (m : drop p b)
 
 -- | Place a mark at a position only if it was not previously taken.
-makeMove :: Board -> Mark -> Int -> Either String Board
+makeMove :: Board -> Mark -> Int -> Maybe Board
 makeMove b m i =
   let prev = getMark b i
    in if prev /= Empty
-        then Left "Mark already present!"
-        else Right $ setMark b m i
+        then Nothing
+        else Just $ setMark b m i
 
 -- | Get the nth row of a board.
 nthRow :: Board -> Int -> [Mark]
