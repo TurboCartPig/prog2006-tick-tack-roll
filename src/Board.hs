@@ -1,4 +1,4 @@
-module Board (Rotation, Board, Mark (X, O, Empty), checkIfWon, setMark, getMark, makeMove, getPossibleMoves, newBoard, rotateBoard) where
+module Board (Rotation, Board, Mark (X, O, Empty), checkIfWon, checkIfDraw, setMark, getMark, makeMove, getPossibleMoves, newBoard, rotateBoard) where
 
 import           Common    (enumerate)
 import           Data.Char (intToDigit)
@@ -84,6 +84,10 @@ checkIfWon (Board b) mark =
       diagonal1 = all (== mark) [b !! d | d <- take rowWidth [0, rowWidth + 1 ..]] :: Bool
       diagonal2 = all (== mark) [b !! d | d <- take rowWidth [rowWidth - 1, rowWidth * 2 - 2 ..]] :: Bool
    in rows || columns || diagonal1 || diagonal2
+
+-- | Check if there are no more moves to make, aka the match is a draw.
+checkIfDraw :: Board -> Bool
+checkIfDraw (Board b) = null $ filter (== Empty) b
 
 -- | Get all the possible moves (indices of empty places) left to make on a board.
 getPossibleMoves :: Board -> [Int]

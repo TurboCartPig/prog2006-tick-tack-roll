@@ -1,9 +1,9 @@
 module Game (gameloop, GameState (GameState), PlayerType (Cpu, Human)) where
 
-import Board
-import Common
-import System.Random (randomRIO)
-import Text.Read (readMaybe)
+import           Board
+import           Common
+import           System.Random (randomRIO)
+import           Text.Read     (readMaybe)
 
 -- | Parse the input string from the player into game actions.
 --
@@ -35,7 +35,7 @@ data GameState = GameState
     -- | Same as for playerX, but for mark O.
     playerO :: PlayerType,
     -- | The game board.
-    board :: Board
+    board   :: Board
   }
 
 -- | Main gameloop.
@@ -50,13 +50,16 @@ gameloop (GameState current px po board) = do
   case board' of
     Just board'' -> do
       case checkIfWon board'' current of
-        False -> gameloop $ GameState next px po board''
         True  -> putStrLn $ "GAME OVER! " <> show current <> " Won!"
-    Nothing -> putStrLn "GAME OVER! Illigial move"
+        False -> do
+          case checkIfDraw board'' of
+            True  -> putStrLn "GAME OVER! DRAW!"
+            False -> gameloop $ GameState next px po board''
+    Nothing -> putStrLn "GAME OVER! Illegal move"
 
 -- | Make a move on the board based on whether the current player is a human or cpu.
 makeMove' :: Board -> Mark -> PlayerType -> IO (Maybe Board)
-makeMove' board mark Cpu = return <$> makeMoveCpu board mark
+makeMove' board mark Cpu   = return <$> makeMoveCpu board mark
 makeMove' board mark Human = makeMoveHuman board mark
 
 -- | Make a move on the board by prompting the user for input and doing what they say.
