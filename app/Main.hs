@@ -1,11 +1,12 @@
 module Main where
 
-import Board
-import Control.Monad (when)
-import Game
-import System.Console.GetOpt
-import System.Environment (getArgs)
-import System.Exit (ExitCode (ExitFailure, ExitSuccess), exitWith)
+import           Board
+import           Control.Monad         (when)
+import           Game
+import           System.Console.GetOpt
+import           System.Environment    (getArgs)
+import           System.Exit           (ExitCode (ExitFailure, ExitSuccess),
+                                        exitWith)
 
 -- | Create the initial game state based on cli flags.
 newGameState :: [Flags] -> GameState

@@ -51,7 +51,7 @@ gameloop (GameState current px po board) = do
     Just board'' -> do
       case checkIfWon board'' current of
         False -> gameloop $ GameState next px po board''
-        True -> putStrLn $ "GAME OVER! " <> show current <> " Won!"
+        True  -> putStrLn $ "GAME OVER! " <> show current <> " Won!"
     Nothing -> putStrLn "GAME OVER! Illigial move"
 
 -- | Make a move on the board based on whether the current player is a human or cpu.
@@ -74,10 +74,10 @@ makeMoveHuman' board mark input = do
   (index, rotation) <- parsePlayerCommand input
   board' <- makeMove board mark index
   return $ case rotation of
-    Just r -> rotateBoard board' r
+    Just r  -> rotateBoard board' r
     Nothing -> board'
 
--- | Make a move on the board by ranomly choosing one of the currently possible moves.
+-- | Make a move on the board by randomly choosing one of the currently possible moves.
 makeMoveCpu :: Board -> Mark -> IO Board
 makeMoveCpu board mark = do
   let moves = getPossibleMoves board

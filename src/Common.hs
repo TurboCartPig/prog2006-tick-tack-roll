@@ -8,7 +8,7 @@ module Common (headM, tailM, enumerate) where
 -- >>> headM []
 -- Nothing
 headM :: [a] -> Maybe a
-headM [] = Nothing
+headM []      = Nothing
 headM (x : _) = Just x
 
 -- | Maybe get the tail of a list.
@@ -19,7 +19,7 @@ headM (x : _) = Just x
 -- >>> tailM [] :: Maybe [Int]
 -- Nothing
 tailM :: [a] -> Maybe [a]
-tailM [] = Nothing
+tailM []       = Nothing
 tailM (_ : xs) = Just xs
 
 -- | Enumerate a list.

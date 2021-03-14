@@ -1,8 +1,8 @@
 module Board (Rotation, Board, Mark (X, O, Empty), checkIfWon, setMark, getMark, makeMove, getPossibleMoves, newBoard, rotateBoard) where
 
-import Common
-import Data.Char (intToDigit)
-import Data.List (intercalate)
+import           Common    (enumerate)
+import           Data.Char (intToDigit)
+import           Data.List (intercalate)
 
 -- | The width of one row of a board.
 rowWidth = 3 :: Int
@@ -16,8 +16,8 @@ data Mark = O | X | Empty
   deriving (Eq)
 
 instance Show Mark where
-  show O = "O"
-  show X = "X"
+  show O     = "O"
+  show X     = "X"
   show Empty = "_"
 
 -- | A board of marks used in the game.
@@ -85,7 +85,7 @@ checkIfWon (Board b) mark =
       diagonal2 = all (== mark) [b !! d | d <- take rowWidth [rowWidth - 1, rowWidth * 2 - 2 ..]] :: Bool
    in rows || columns || diagonal1 || diagonal2
 
--- | Get all the possible moves (indecies of empty places) left to make on a board.
+-- | Get all the possible moves (indices of empty places) left to make on a board.
 getPossibleMoves :: Board -> [Int]
 getPossibleMoves (Board b) = map ((+ 1) . fst) $ filter (\(_, x) -> x == Empty) $ enumerate b
 
@@ -93,19 +93,19 @@ getPossibleMoves (Board b) = map ((+ 1) . fst) $ filter (\(_, x) -> x == Empty) 
 rotateBoard :: Board -> Rotation -> Board
 rotateBoard b r = case r of
   RRight -> rotateRight . swapCorners $ b
-  RLeft -> rotateLeft . swapCorners $ b
+  RLeft  -> rotateLeft . swapCorners $ b
 
 -- From here on functions require the board to be 3x3
 -- ---------------------------------------------------------------------------------------------
 
 swapCorners :: Board -> Board
 swapCorners (Board (a : b : c : xs)) = Board $ c : b : a : xs
-swapCorners _ = undefined -- Other lenghts are not handled yet
+swapCorners _                        = undefined -- Other lengths are not handled yet
 
 rotateLeft :: Board -> Board
 rotateLeft (Board [a, b, c, d, e, f, g, h, i]) = Board [c, f, i, b, e, h, a, d, g]
-rotateLeft _ = undefined -- Other lenghts are not handled yet
+rotateLeft _ = undefined -- Other lengths are not handled yet
 
 rotateRight :: Board -> Board
 rotateRight (Board [a, b, c, d, e, f, g, h, i]) = Board [g, d, a, h, e, b, i, f, c]
-rotateRight _ = undefined -- Other lenghts are not handled yet
+rotateRight _ = undefined -- Other lengths are not handled yet
