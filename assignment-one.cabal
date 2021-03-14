@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d0f7e897aad2cb6c7d10bfd859eed2290d221e459df7d993e79a5971084df495
+-- hash: d9fa5b7573176b24b636354d9f3d4702ee9f1748cbb51eda985347581f725771
 
 name:           assignment-one
 version:        0.1.0.0
@@ -19,14 +19,16 @@ extra-source-files:
 
 library
   exposed-modules:
+      Board
       Common
-      Lib
+      Game
   other-modules:
       Paths_assignment_one
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
+    , random
   default-language: Haskell2010
 
 executable assignment-one-exe
@@ -55,4 +57,5 @@ test-suite assignment-one-test
     , base >=4.7 && <5
     , doctest
     , hspec
+    , random
   default-language: Haskell2010

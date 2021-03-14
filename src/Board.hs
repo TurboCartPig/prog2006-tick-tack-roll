@@ -1,4 +1,4 @@
-module Lib (Rotation, Board, Mark (X, O, Empty), checkIfWon, setMark, getMark, makeMove, getPossibleMoves, newBoard, rotateBoard) where
+module Board (Rotation, Board, Mark (X, O, Empty), checkIfWon, setMark, getMark, makeMove, getPossibleMoves, newBoard, rotateBoard) where
 
 import Common
 import Data.Char (intToDigit)
