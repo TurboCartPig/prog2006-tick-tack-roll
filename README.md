@@ -30,7 +30,7 @@ There were a bunch of libraries for doing argument parsing, but none of them see
 
 ## Time estimates
 
-Thinking about the problem: 4h
-Searching for stuff: 4h
-Coding/Documenting/Testing: 10h
-Total: 18h
+- Thinking about the problem: 4h
+- Searching for stuff: 4h
+- Coding/Documenting/Testing: 12h
+- Total: 20h
