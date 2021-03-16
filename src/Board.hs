@@ -12,16 +12,16 @@ rowWidth = 3 :: Int
 -- | Board rotation direction.
 data Rotation = RLeft | RRight
 
--- | Manually implement Show to controll how the type is converted to a string.
+-- | Manually implement Show to control how the type is converted to a string.
 instance Show Rotation where
   show RRight = "right"
   show RLeft  = "left"
 
--- | Manually implement Read to controll how the type is constructed from a string.
--- | I stole the implementation ghc generates from derivig(Read),
--- | and modified it to use "left" and "right" as opposed to "RLeft" and "RRight" as it usually whould.
+-- | Manually implement Read to control how the type is constructed from a string.
+-- | I stole the implementation ghc generates from deriving(Read),
+-- | and modified it to use "left" and "right" as opposed to "RLeft" and "RRight" as it usually would.
 -- | You can replicate this using the -ddump-deriv option with ghc (Or --ghc-options="-ddump-deriv" using stack).
--- | This is admittadly overkill and could have been simpler, but ehh.
+-- | This is admittedly overkill and could have been simpler, but ehh.
 instance Read Rotation where
   readPrec = parens $ choose [("left", return RLeft), ("right", return RRight)]
   readList = readListDefault
