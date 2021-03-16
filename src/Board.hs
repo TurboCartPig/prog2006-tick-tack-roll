@@ -1,4 +1,4 @@
-module Board (Rotation, Board, Mark (X, O, Empty), checkIfWon, checkIfDraw, setMark, getMark, makeMove, getPossibleMoves, newBoard, rotateBoard) where
+module Board (Rotation (RLeft, RRight), Board (Board), Mark (X, O, Empty), checkIfWon, checkIfDraw, setMark, getMark, makeMove, getPossibleMoves, newBoard, rotateBoard, swapCorners, rotateLeft, rotateRight) where
 
 import           Common    (enumerate)
 import           Data.Char (intToDigit)
@@ -22,9 +22,10 @@ instance Show Mark where
 
 -- | A board of marks used in the game.
 newtype Board = Board [Mark]
+  deriving (Eq)
 
 instance Show Board where
-  show (Board b) = intercalate "\n" [rowToString $ nthRow (Board b) r | r <- [1 .. rowWidth]]
+  show (Board b) = intercalate "\n" ["# " ++ rowToString (nthRow (Board b) r) | r <- [1 .. rowWidth]]
     where
       rowToString = map (head . show)
 
@@ -40,10 +41,16 @@ getMark :: Board -> Int -> Mark
 getMark (Board b) p = b !! (p - 1)
 
 -- | Set the mark at some position on the board.
+--
+-- >>> getMark (setMark newBoard X 5) 5
+-- X
 setMark :: Board -> Mark -> Int -> Board
 setMark (Board b) m p = Board $ take (p - 1) b ++ (m : drop p b)
 
 -- | Place a mark at a position only if it was not previously taken.
+--
+-- >>> makeMove (setMark newBoard X 5) X 5
+-- Nothing
 makeMove :: Board -> Mark -> Int -> Maybe Board
 makeMove b m i =
   let prev = getMark b i
@@ -52,7 +59,11 @@ makeMove b m i =
         else Just $ setMark b m i
 
 -- | Get the nth row of a board.
+--
+-- >>> nthRow (Board [X, X, X, O, O, O, O, O, O]) 1
+-- [X,X,X]
 nthRow :: Board -> Int -> [Mark]
+nthRow _ 0 = error "You probably meant to call this with 1 for first row"
 nthRow (Board b) n = take rowWidth $ drop ((n - 1) * rowWidth) b
 
 -- | Get the nth column of a board.
@@ -86,6 +97,13 @@ checkIfWon (Board b) mark =
    in rows || columns || diagonal1 || diagonal2
 
 -- | Check if there are no more moves to make, aka the match is a draw.
+--
+-- >>> checkIfDraw newBoard
+-- False
+--
+-- Does not check if some mark has won, only if there are more moves to make.
+-- >>> checkIfDraw $ Board $ replicate (rowWidth * rowWidth) X
+-- True
 checkIfDraw :: Board -> Bool
 checkIfDraw (Board b) = null $ filter (== Empty) b
 
@@ -95,21 +113,26 @@ getPossibleMoves (Board b) = map ((+ 1) . fst) $ filter (\(_, x) -> x == Empty) 
 
 -- | First swap the corners and then rotate the board.
 rotateBoard :: Board -> Rotation -> Board
-rotateBoard b r = case r of
-  RRight -> rotateRight . swapCorners $ b
-  RLeft  -> rotateLeft . swapCorners $ b
+rotateBoard b r = (case r of
+    RRight -> rotateRight
+    RLeft  -> rotateLeft
+  ) . swapCorners $ b
 
--- From here on functions require the board to be 3x3
+-- From here on functions require the board to be 3x3.
+-- See test/Spec.hs for tests of these functions.
 -- ---------------------------------------------------------------------------------------------
 
+-- | Swap the corners of the board.
 swapCorners :: Board -> Board
 swapCorners (Board (a : b : c : xs)) = Board $ c : b : a : xs
-swapCorners _                        = undefined -- Other lengths are not handled yet
+swapCorners _                        = error "Other lengths are not handled yet"
 
+-- | Rotate the board left.
 rotateLeft :: Board -> Board
 rotateLeft (Board [a, b, c, d, e, f, g, h, i]) = Board [c, f, i, b, e, h, a, d, g]
-rotateLeft _ = undefined -- Other lengths are not handled yet
+rotateLeft _ = error "Other lengths are not handled yet"
 
+-- | Rotate the board right.
 rotateRight :: Board -> Board
 rotateRight (Board [a, b, c, d, e, f, g, h, i]) = Board [g, d, a, h, e, b, i, f, c]
-rotateRight _ = undefined -- Other lengths are not handled yet
+rotateRight _ = error "Other lengths are not handled yet"

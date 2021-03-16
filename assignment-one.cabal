@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d9fa5b7573176b24b636354d9f3d4702ee9f1748cbb51eda985347581f725771
+-- hash: e2f1c45548e3c1ca69b5301a4b648e30341603aa7b3e8a2924ccbe8d22626b11
 
 name:           assignment-one
 version:        0.1.0.0
@@ -53,7 +53,8 @@ test-suite assignment-one-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      assignment-one
+      QuickCheck
+    , assignment-one
     , base >=4.7 && <5
     , doctest
     , hspec
