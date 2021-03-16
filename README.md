@@ -1,6 +1,6 @@
 # Haskell assignment 1 - Tick tack roll
 
-By default the program runs in human vs. cpu mode, were the program will print the board every time it prompts for user input. One oddity in the game is that it requires board rotations to be specified by typing "RRight" and "RLeft". Another oddity is that if the game is run in cpu vs. cpu mode the board is never printed, the game just finishes instantly.
+By default the program runs in human vs. cpu mode, were the program will print the board every time it prompts for user input. One oddity is that if the game is run in cpu vs. cpu mode the board is never printed, the game just finishes instantly.
 
 The project is organized with the main program in `app`, the common functionality in `src`, and tests in `test`. Most of the tests are doctests, but there are also some hspec unit tests.
 
@@ -56,11 +56,11 @@ One with rotations:
 # ___
 # ___
 # ___
-1 RLeft
+1 left
 # X_O
 # ___
 # ___
-2 RRight
+2 right
 # __O
 # __X
 # _OX
@@ -68,7 +68,7 @@ One with rotations:
 # __O
 # _XX
 # OOX
-4 RLeft
+4 left
 GAME OVER! X Won!
 ```
 

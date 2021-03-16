@@ -6,12 +6,16 @@ import           System.Random (randomRIO)
 import           Text.Read     (readMaybe)
 
 -- | Parse the input string from the player into game actions.
+-- | NOTE: DocTests are a bit broken due to overrideing how types are Read and Shown.
 --
 -- >>> parsePlayerCommand "5"
 -- Just (5,Nothing)
 --
--- >>> parsePlayerCommand "5 RRight"
--- Just (5,Just RRight)
+-- >>> parsePlayerCommand "5 right"
+-- Just (5,Just right)
+--
+-- >>> parsePlayerCommand "1 left"
+-- Just (1,Just left)
 --
 -- >>> parsePlayerCommand "this is not valid"
 -- Nothing

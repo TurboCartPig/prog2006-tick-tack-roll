@@ -3,13 +3,29 @@ module Board (Rotation (RLeft, RRight), Board (Board), Mark (X, O, Empty), check
 import           Common    (enumerate)
 import           Data.Char (intToDigit)
 import           Data.List (intercalate)
+import           GHC.Read  (choose, parens, readList, readListDefault,
+                            readListPrec, readListPrecDefault, readPrec)
 
 -- | The width of one row of a board.
 rowWidth = 3 :: Int
 
 -- | Board rotation direction.
 data Rotation = RLeft | RRight
-  deriving (Show, Read)
+
+-- | Manually implement Show to controll how the type is converted to a string.
+instance Show Rotation where
+  show RRight = "right"
+  show RLeft  = "left"
+
+-- | Manually implement Read to controll how the type is constructed from a string.
+-- | I stole the implementation ghc generates from derivig(Read),
+-- | and modified it to use "left" and "right" as opposed to "RLeft" and "RRight" as it usually whould.
+-- | You can replicate this using the -ddump-deriv option with ghc (Or --ghc-options="-ddump-deriv" using stack).
+-- | This is admittadly overkill and could have been simpler, but ehh.
+instance Read Rotation where
+  readPrec = parens $ choose [("left", return RLeft), ("right", return RRight)]
+  readList = readListDefault
+  readListPrec = readListPrecDefault
 
 -- | A mark on the board.
 data Mark = O | X | Empty
